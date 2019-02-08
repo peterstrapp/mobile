@@ -123,6 +123,7 @@ export default class Root extends Abstract {
   componentWillUnmount() {
     super.componentWillUnmount();
     ApplicationState.get().removeStateObserver(this.stateObserver);
+    Sync.get().removeEventHandler(this.syncEventHandler);
     Sync.get().removeSyncStatusObserver(this.syncStatusObserver);
     clearInterval(this.syncTimer);
   }
@@ -178,8 +179,9 @@ export default class Root extends Abstract {
     let loadLocalCompletion = (items) => {
       this.setSubTitle("Syncing...");
       this.dataLoaded = true;
+
       // perform initial sync
-      Sync.get().sync().then(() => {
+      Sync.get().sync({performIntegrityCheck: true}).then(() => {
         this.setSubTitle(null);
       });
     }
