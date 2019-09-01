@@ -9,7 +9,8 @@
 	url = git@github.com:mobitar/react-native-mail.git
 [submodule "vendor/react-native-fingerprint-scanner"]
 	path = vendor/react-native-fingerprint-scanner
-	url = git@github.com:mobitar/react-native-fingerprint-scanner.git
+    url = https://github.com/hieuvp/react-native-fingerprint-scanner.git
+#	url = git@github.com:mobitar/react-native-fingerprint-scanner.git
 [submodule "vendor/react-native-flag-secure-android"]
 	path = vendor/react-native-flag-secure-android
 	url = git@github.com:mobitar/react-native-flag-secure-android.git

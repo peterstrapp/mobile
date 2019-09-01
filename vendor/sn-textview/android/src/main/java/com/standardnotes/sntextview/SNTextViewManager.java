@@ -1,7 +1,7 @@
 package com.standardnotes.sntextview;
 
 import android.graphics.Color;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;

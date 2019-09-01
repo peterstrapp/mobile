@@ -1,0 +1,57 @@
+diff --git a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/AndroidInfoModule.java b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/AndroidInfoModule.java
+index cf5ca40..262f22a 100644
+--- a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/AndroidInfoModule.java
++++ b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/AndroidInfoModule.java
+@@ -91,7 +91,7 @@ public class AndroidInfoModule extends ReactContextBaseJavaModule {
+ 
+   private Boolean isRunningScreenshotTest() {
+     try {
+-      Class.forName("android.support.test.rule.ActivityTestRule");
++      Class.forName("androidx.test.rule.ActivityTestRule");
+       return true;
+     } catch (ClassNotFoundException ignored) {
+       return false;
+diff --git a/node_modules/react-native/react.gradle b/node_modules/react-native/react.gradle
+index 5a2259a..b164fe4 100644
+--- a/node_modules/react-native/react.gradle
++++ b/node_modules/react-native/react.gradle
+@@ -106,6 +106,8 @@ afterEvaluate {
+                 jsSourceMapsDir.mkdirs()
+             }
+ 
++
++
+             // Set up inputs and outputs so gradle can cache the result
+             inputs.files fileTree(dir: reactRoot, excludes: inputExcludes)
+             outputs.dir(jsBundleDir)
+@@ -113,7 +115,30 @@ afterEvaluate {
+ 
+             // Set up the call to the react-native cli
+             workingDir(reactRoot)
++doLast {
++    def moveFunc = { resSuffix ->
++        File originalDir = file("$buildDir/generated/res/react/release/drawable-${resSuffix}")
++        if (originalDir.exists()) {
++            File destDir = file("$buildDir/../src/main/res/drawable-${resSuffix}")
++            ant.move(file: originalDir, tofile: destDir)
++        }
++    }
++    def moveRawFunc = { dir ->
++        File originalDir = file("$buildDir/generated/res/react/release/${dir}")
++        if (originalDir.exists()) {
++            File destDir = file("$buildDir/../src/main/res/${dir}")
++            ant.move(file: originalDir, tofile: destDir)
++        }
++    }
+ 
++    moveFunc.curry("ldpi").call()
++    moveFunc.curry("mdpi").call()
++    moveFunc.curry("hdpi").call()
++    moveFunc.curry("xhdpi").call()
++    moveFunc.curry("xxhdpi").call()
++    moveFunc.curry("xxxhdpi").call()
++    moveRawFunc.curry("raw").call()
++}
+             // Set up dev mode
+             def devEnabled = !(config."devDisabledIn${targetName}"
+                 || targetName.toLowerCase().contains("release"))
